@@ -1,0 +1,35 @@
+node {
+	  def mavenHome = tool name: 'maven3.9.1'
+	stage('1.CodeClone'){
+		git 'https://github.com/IamJpizzle/maven-web-application'
+	}
+	stage('2.Mavenbuild'){
+		sh "${mavenHome}/bin/mvn package"
+	}
+	stage('3CodeQualityAnalysis'){
+		sh "${mavenHome}/bin/mvn sonar:sonar"
+	}
+	stage('4.Upload2Nexus'){
+		sh "${mavenHome}/bin/mvn deploy"
+	}
+	stage('5.Deploy2UAT'){
+		deploy adapters: [tomcat9(credentialsId: 'EasterTomcatCredentials', path: '', url: 'http://44.200.226.46:8080/')], contextPath: null, war: 'target/*war'
+	}
+	stage('6.manualApproval'){
+		sh "echo 'This application is reaady for review' "
+		timeout(time:5, unit: 'HOURS'){
+		input message: 'Application is ready for deployment, please review and approve'
+		}
+	}
+	stage('7.Deploy2PROD'){
+		deploy adapters: [tomcat9(credentialsId: 'EasterTomcatCredentials', path: '', url: 'http://44.200.226.46:8080/')], contextPath: null, war: 'target/*war'
+	}
+	stage('8.EmailNotify'){
+		emailext body: '''Hello team,
+
+Build is Done.
+
+JOHNPAULEMENOGU''', recipientProviders: [developers(), contributor(), upstreamDevelopers()], subject: 'Build Status', to: 'johnpaulcemenogu@gmail.com'
+	}
+
+}
