@@ -101,7 +101,7 @@
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Snapshot Nexus Repository </name>
-	      <url>http://3.87.108.3:8081/repository/EasterPaypal-releases/</url>
+	      <url>http://3.87.108.3:8081/repository/EasterPaypal-snapshots/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
