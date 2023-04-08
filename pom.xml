@@ -107,7 +107,7 @@
 	</distributionManagement>
 	
 	<build>
-		<finalName>JpizzleApp</finalName>
+		<finalName>JpizzleApp2</finalName>
 		
 		<plugins>
 			<plugin>
